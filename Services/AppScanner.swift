@@ -3,10 +3,51 @@ import AppKit
 
 class AppScanner {
     static let shared = AppScanner()
-    
+
+    private var cachedApps: [AppItem]?
+    private var lastScanTime: Date?
+    private let cacheTimeout: TimeInterval = 7 * 24 * 60 * 60 // 7天缓存
+    private let persistentCacheKey = "LaunchPadAppsCache"
+    private let cacheTimestampKey = "LaunchPadCacheTimestamp"
+
     private init() {}
     
     func scanApplications() -> [AppItem] {
+        // 先尝试从内存缓存加载
+        if let cachedApps = cachedApps,
+           let lastScanTime = lastScanTime,
+           Date().timeIntervalSince(lastScanTime) < cacheTimeout {
+            return cachedApps
+        }
+
+        // 尝试从持久化缓存加载
+        if let persistentApps = loadFromPersistentCache() {
+            cachedApps = persistentApps
+            lastScanTime = UserDefaults.standard.object(forKey: cacheTimestampKey) as? Date
+            return persistentApps
+        }
+
+        let apps = performScan()
+
+        // 更新缓存
+        saveToPersistentCache(apps)
+        cachedApps = apps
+        lastScanTime = Date()
+
+        return apps
+    }
+
+    func loadFromCache() -> [AppItem] {
+        // 专门用于启动时快速加载的方法
+        if let persistentApps = loadFromPersistentCache() {
+            cachedApps = persistentApps
+            lastScanTime = UserDefaults.standard.object(forKey: cacheTimestampKey) as? Date
+            return persistentApps
+        }
+        return []
+    }
+
+    private func performScan() -> [AppItem] {
         var apps: [AppItem] = []
         var seenBundleIds = Set<String>()  // 用于去重
         var position = 0
@@ -219,5 +260,47 @@ class AppScanner {
             }
         }
         return false
+    }
+
+    // MARK: - 持久化缓存方法
+
+    private func saveToPersistentCache(_ apps: [AppItem]) {
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(apps)
+            UserDefaults.standard.set(data, forKey: persistentCacheKey)
+            UserDefaults.standard.set(Date(), forKey: cacheTimestampKey)
+        } catch {
+            print("保存持久化缓存失败: \(error)")
+        }
+    }
+
+    private func loadFromPersistentCache() -> [AppItem]? {
+        guard let data = UserDefaults.standard.data(forKey: persistentCacheKey),
+              let timestamp = UserDefaults.standard.object(forKey: cacheTimestampKey) as? Date else {
+            return nil
+        }
+
+        // 检查缓存是否过期
+        if Date().timeIntervalSince(timestamp) > cacheTimeout {
+            return nil
+        }
+
+        do {
+            let decoder = JSONDecoder()
+            let apps = try decoder.decode([AppItem].self, from: data)
+            return apps
+        } catch {
+            print("加载持久化缓存失败: \(error)")
+            return nil
+        }
+    }
+
+    func clearCache() {
+        // 清除所有缓存的方法
+        cachedApps = nil
+        lastScanTime = nil
+        UserDefaults.standard.removeObject(forKey: persistentCacheKey)
+        UserDefaults.standard.removeObject(forKey: cacheTimestampKey)
     }
 }

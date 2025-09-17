@@ -17,9 +17,9 @@ class AppManager: ObservableObject {
     @Published var draggedApp: AppItem?
     @Published var dragHoverIndex: Int? = nil
     
-    let appsPerPage = 35
     let columns = 7
-    let rows = 5
+    @Published var rows = 5
+    @Published var appsPerPage = 35
 
     // 第一屏优先级应用配置（按用户指定的顺序 - 使用.app文件名）
     private let firstPagePriorityApps: [String] = [
@@ -63,7 +63,19 @@ class AppManager: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     init() {
-        loadApps()
+        // 立即从缓存加载应用，实现快速启动
+        loadAppsFromCache()
+    }
+
+    /// 根据屏幕高度调整布局参数
+    func updateLayoutForScreenHeight(_ screenHeight: CGFloat) {
+        if screenHeight <= 982 {
+            rows = 4
+            appsPerPage = columns * rows // 7 * 4 = 28
+        } else {
+            rows = 5
+            appsPerPage = columns * rows // 7 * 5 = 35
+        }
     }
 
     /// 根据第一屏优先级进行智能排序
@@ -111,25 +123,78 @@ class AppManager: ObservableObject {
         UserDefaults.standard.removeObject(forKey: "AppPositions")
         UserDefaults.standard.removeObject(forKey: "AppFolders")
 
+        // 清除应用缓存，强制重新扫描
+        AppScanner.shared.clearCache()
+
         // 重新加载应用
         loadApps()
     }
 
-    
-    func loadApps() {
-        // 先获取新扫描的应用
-        let scannedApps = AppScanner.shared.scanApplications()
+    /// 从缓存快速加载应用
+    private func loadAppsFromCache() {
+        let cachedApps = AppScanner.shared.loadFromCache()
+        if !cachedApps.isEmpty {
+            let sortedApps = loadSavedPositions(from: cachedApps)
+            allApps = sortedApps
 
-        // 尝试加载保存的排序，如果没有则使用智能排序
-        allApps = loadSavedPositions(from: scannedApps)
+            // 重新设置位置
+            for (index, _) in allApps.enumerated() {
+                allApps[index].position = index
+            }
 
-        // 重新设置位置
-        for (index, _) in allApps.enumerated() {
-            allApps[index].position = index
+            displayedApps = allApps
+            loadSavedFolders()
+
         }
 
-        displayedApps = allApps
-        loadSavedFolders()
+        // 启动后台更新
+        startBackgroundUpdate()
+    }
+
+    /// 启动后台更新
+    private func startBackgroundUpdate() {
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 1.0) {
+            let freshApps = AppScanner.shared.scanApplications()
+            let sortedApps = self.loadSavedPositions(from: freshApps)
+
+            DispatchQueue.main.async {
+                // 检查是否有变化
+                if sortedApps.count != self.allApps.count ||
+                   !sortedApps.elementsEqual(self.allApps, by: { $0.bundleIdentifier == $1.bundleIdentifier }) {
+                    self.allApps = sortedApps
+
+                    // 重新设置位置
+                    for (index, _) in self.allApps.enumerated() {
+                        self.allApps[index].position = index
+                    }
+
+                    self.displayedApps = self.allApps
+                    self.loadSavedFolders()
+                } else {
+                }
+            }
+        }
+    }
+
+    
+    func loadApps() {
+        // 异步加载应用，避免阻塞UI
+        DispatchQueue.global(qos: .userInitiated).async {
+            let scannedApps = AppScanner.shared.scanApplications()
+            let sortedApps = self.loadSavedPositions(from: scannedApps)
+
+            DispatchQueue.main.async {
+                self.allApps = sortedApps
+
+                // 重新设置位置
+                for (index, _) in self.allApps.enumerated() {
+                    self.allApps[index].position = index
+                }
+
+                self.displayedApps = self.allApps
+                self.loadSavedFolders()
+            }
+        }
     }
     
     func filterApps() {
@@ -144,6 +209,10 @@ class AppManager: ObservableObject {
     
     func launchApp(_ app: AppItem) {
         app.launch()
+        // 启动应用后退出LaunchPad
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            NSApplication.shared.terminate(nil)
+        }
     }
     
     
