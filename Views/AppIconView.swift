@@ -7,6 +7,7 @@ struct AppIconView: View {
     @EnvironmentObject var appManager: AppManager
     @State private var isHovered = false
     @State private var isPressed = false
+    @State private var iconDisplaySize: CGSize = CGSize(width: 128, height: 128)
     
     var body: some View {
         VStack(spacing: 8) {
@@ -15,7 +16,7 @@ struct AppIconView: View {
                     Image(nsImage: icon)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 128, height: 128)
+                        .frame(width: iconDisplaySize.width, height: iconDisplaySize.height)
                         .scaleEffect(isPressed ? 0.9 : (isHovered ? 1.1 : 1.0))
                         .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isHovered)
                         .animation(.spring(response: 0.1, dampingFraction: 0.9), value: isPressed)
@@ -23,7 +24,7 @@ struct AppIconView: View {
                 } else {
                     RoundedRectangle(cornerRadius: 24)
                         .fill(Color.gray.opacity(0.3))
-                        .frame(width: 128, height: 128)
+                        .frame(width: iconDisplaySize.width, height: iconDisplaySize.height)
                 }
                 
                 if appManager.isDragging {
@@ -31,12 +32,12 @@ struct AppIconView: View {
                         // 被拖拽的应用 - 半透明效果
                         RoundedRectangle(cornerRadius: 24)
                             .fill(Color.black.opacity(0.3))
-                            .frame(width: 136, height: 136)
+                            .frame(width: iconDisplaySize.width + 8, height: iconDisplaySize.height + 8)
                     } else if isDragTarget {
                         // 拖放目标 - 高亮边框
                         RoundedRectangle(cornerRadius: 24)
                             .stroke(Color.accentColor, lineWidth: 3)
-                            .frame(width: 136, height: 136)
+                            .frame(width: iconDisplaySize.width + 8, height: iconDisplaySize.height + 8)
                     }
                 }
             }
@@ -50,6 +51,12 @@ struct AppIconView: View {
                 .shadow(color: .black.opacity(0.7), radius: 2, y: 1)
         }
         .contentShape(Rectangle())
+        .onAppear {
+            calculateIconSize()
+        }
+        .onChange(of: app.icon) {
+            calculateIconSize()
+        }
         .onHover { hovering in
             isHovered = hovering
         }
@@ -79,5 +86,16 @@ struct AppIconView: View {
                 NSWorkspace.shared.activateFileViewerSelecting([app.url])
             }
         }
+    }
+
+    private func calculateIconSize() {
+        guard let mainScreen = NSScreen.main else {
+            iconDisplaySize = CGSize(width: 128, height: 128)
+            return
+        }
+
+        let scaleFactor = mainScreen.backingScaleFactor
+        let preferredBaseSize = IconSizeCalculator.getPreferredBaseSize(for: scaleFactor)
+        iconDisplaySize = IconSizeCalculator.calculateDisplaySize(for: app.icon, preferredBaseSize: preferredBaseSize)
     }
 }

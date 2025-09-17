@@ -20,6 +20,7 @@ let package = Package(
             sources: [
                 "LaunchPadApp.swift",
                 "Models/AppItem.swift",
+                "Models/IconSizeCalculator.swift",
                 "ViewModels/AppManager.swift",
                 "Services/AppScanner.swift",
                 "Views/ContentView.swift",

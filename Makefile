@@ -3,6 +3,10 @@
 build:
 	@echo "Building LaunchPad Clone..."
 	swift build -c release
+	@echo "Copying build results to visible directory..."
+	@mkdir -p build
+	@cp -r .build/release/* build/ 2>/dev/null || true
+	@echo "Build results available in build/ directory"
 
 run:
 	@echo "Running LaunchPad Clone..."

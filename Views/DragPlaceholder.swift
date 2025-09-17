@@ -1,12 +1,18 @@
 import SwiftUI
 
 struct DragPlaceholder: View {
+    let iconSize: CGSize
+
+    init(iconSize: CGSize = CGSize(width: 128, height: 128)) {
+        self.iconSize = iconSize
+    }
+
     var body: some View {
         VStack(spacing: 8) {
             RoundedRectangle(cornerRadius: 24)
                 .stroke(Color.accentColor.opacity(0.6), lineWidth: 2)
                 .fill(Color.accentColor.opacity(0.1))
-                .frame(width: 128, height: 128)
+                .frame(width: iconSize.width, height: iconSize.height)
                 .overlay(
                     RoundedRectangle(cornerRadius: 24)
                         .stroke(Color.accentColor.opacity(0.3), lineWidth: 1)
