@@ -20,38 +20,108 @@ class AppManager: ObservableObject {
     let appsPerPage = 35
     let columns = 7
     let rows = 5
-    
+
+    // 第一屏优先级应用配置（按用户指定的顺序 - 使用.app文件名）
+    private let firstPagePriorityApps: [String] = [
+        "com.apple.AppStore",
+        "com.apple.Safari",
+        "com.apple.mail",
+        "com.apple.AddressBook",
+        "com.apple.iCal",
+        "com.apple.reminders",
+        "com.apple.Notes",
+        "com.apple.FaceTime",
+        "com.apple.MobileSMS",
+        "com.apple.Maps",
+        "com.apple.findmy",
+        "com.apple.PhotoBooth",
+        "com.apple.Photos",
+        "com.apple.Music",
+        "com.apple.podcasts",
+        "com.apple.TV",
+        "com.apple.VoiceMemos",
+        "com.apple.iWork.Keynote",
+        "com.apple.iWork.Numbers",
+        "com.apple.iWork.Pages",
+        "com.apple.weather",
+        "com.apple.news",
+        "com.apple.stocks",
+        "com.apple.iBooksX",
+        "com.apple.clock",
+        "com.apple.calculator",
+        "com.apple.freeform",
+        "com.apple.Home",
+        "com.apple.siri.launcher",
+        "com.apple.ScreenContinuity",
+        "com.apple.Passwords",
+        "com.apple.systempreferences",
+        "com.apple.Chess",
+        "com.apple.Dictionary",
+        "com.apple.helpviewer"
+    ]
+
     private var cancellables = Set<AnyCancellable>()
-    
+
     init() {
         loadApps()
     }
+
+    /// 根据第一屏优先级进行智能排序
+    private func applyFirstPagePrioritySort(to apps: [AppItem]) -> [AppItem] {
+        var sortedApps: [AppItem] = []
+        var remainingApps = apps
+
+        // 第一步：按优先级顺序添加第一屏应用（使用bundleIdentifier匹配）
+        for priorityBundleId in firstPagePriorityApps {
+            if let app = findAndRemoveApp(bundleId: priorityBundleId, from: &remainingApps) {
+                sortedApps.append(app)
+            }
+        }
+
+        // 第二步：如果第一屏还没满35个，用字母顺序的其他应用补足
+        if sortedApps.count < appsPerPage {
+            let alphabeticalApps = remainingApps.sorted { $0.package_name.lowercased() < $1.package_name.lowercased() }
+            let neededApps = min(appsPerPage - sortedApps.count, alphabeticalApps.count)
+            sortedApps.append(contentsOf: Array(alphabeticalApps.prefix(neededApps)))
+
+            // 从剩余应用中移除已添加的
+            for app in Array(alphabeticalApps.prefix(neededApps)) {
+                remainingApps.removeAll { $0.bundleIdentifier == app.bundleIdentifier }
+            }
+        }
+
+        // 第三步：剩余应用按字母顺序添加到后续屏幕
+        let remainingAlphabetical = remainingApps.sorted { $0.package_name.lowercased() < $1.package_name.lowercased() }
+        sortedApps.append(contentsOf: remainingAlphabetical)
+
+        return sortedApps
+    }
+
+    /// 查找并移除指定bundleIdentifier的应用
+    private func findAndRemoveApp(bundleId: String, from apps: inout [AppItem]) -> AppItem? {
+        if let index = apps.firstIndex(where: { $0.bundleIdentifier == bundleId }) {
+            return apps.remove(at: index)
+        }
+        return nil
+    }
+
+    /// 重置到默认的第一屏优先级排序（调试和重置功能）
+    func resetToDefaultFirstPageSorting() {
+        // 清除保存的顺序和文件夹
+        UserDefaults.standard.removeObject(forKey: "AppPositions")
+        UserDefaults.standard.removeObject(forKey: "AppFolders")
+
+        // 重新加载应用
+        loadApps()
+    }
+
     
     func loadApps() {
         // 先获取新扫描的应用
         let scannedApps = AppScanner.shared.scanApplications()
 
-        // 如果有保存的顺序，按顺序重建；否则使用扫描顺序
-        if let savedOrder = UserDefaults.standard.array(forKey: "AppPositions") as? [String] {
-            var reorderedApps: [AppItem] = []
-
-            // 先添加保存顺序中仍然存在的应用
-            for bundleId in savedOrder {
-                if let app = scannedApps.first(where: { $0.bundleIdentifier == bundleId }) {
-                    reorderedApps.append(app)
-                }
-            }
-
-            // 再添加新扫描到的应用（不在保存列表中的），按字母顺序
-            let newApps = scannedApps.filter { !savedOrder.contains($0.bundleIdentifier) }
-            let sortedNewApps = newApps.sorted { $0.name.lowercased() < $1.name.lowercased() }
-            reorderedApps.append(contentsOf: sortedNewApps)
-
-            allApps = reorderedApps
-        } else {
-            // 首次运行，按字母顺序排列
-            allApps = scannedApps.sorted { $0.name.lowercased() < $1.name.lowercased() }
-        }
+        // 尝试加载保存的排序，如果没有则使用智能排序
+        allApps = loadSavedPositions(from: scannedApps)
 
         // 重新设置位置
         for (index, _) in allApps.enumerated() {
@@ -67,7 +137,7 @@ class AppManager: ObservableObject {
             displayedApps = allApps
         } else {
             displayedApps = allApps.filter { app in
-                app.name.localizedCaseInsensitiveContains(searchText)
+                app.title.localizedCaseInsensitiveContains(searchText)
             }
         }
     }
@@ -111,6 +181,30 @@ class AppManager: ObservableObject {
         // 只保存bundleIdentifier的顺序，不保存整个AppItem
         let bundleIdentifiers = allApps.map { $0.bundleIdentifier }
         UserDefaults.standard.set(bundleIdentifiers, forKey: "AppPositions")
+    }
+
+    private func loadSavedPositions(from scannedApps: [AppItem]) -> [AppItem] {
+        // 尝试加载保存的排序
+        guard let savedBundleIds = UserDefaults.standard.array(forKey: "AppPositions") as? [String] else {
+            // 没有保存的排序，使用默认的智能排序
+            return applyFirstPagePrioritySort(to: scannedApps)
+        }
+
+        var sortedApps: [AppItem] = []
+        var remainingApps = scannedApps
+
+        // 按保存的顺序恢复应用
+        for bundleId in savedBundleIds {
+            if let app = findAndRemoveApp(bundleId: bundleId, from: &remainingApps) {
+                sortedApps.append(app)
+            }
+        }
+
+        // 添加新发现的应用（可能是新安装的）到末尾，按package_name排序
+        let newApps = remainingApps.sorted { $0.package_name.lowercased() < $1.package_name.lowercased() }
+        sortedApps.append(contentsOf: newApps)
+
+        return sortedApps
     }
     
     
@@ -160,7 +254,8 @@ class AppManager: ObservableObject {
         if let hoverIndex = dragHoverIndex {
             let clampedIndex = max(0, min(hoverIndex, previewApps.count))
             let placeholder = AppItem(
-                name: "Placeholder",
+                title: "Placeholder",
+                package_name: "Placeholder",
                 bundleIdentifier: "placeholder",
                 url: URL(fileURLWithPath: "/"),
                 position: clampedIndex

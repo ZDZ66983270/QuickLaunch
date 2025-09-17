@@ -42,7 +42,7 @@ struct AppIconView: View {
                 }
             }
             
-            Text(app.name)
+            Text(app.title)
                 .font(.system(size: 14))
                 .lineLimit(2)
                 .multilineTextAlignment(.center)

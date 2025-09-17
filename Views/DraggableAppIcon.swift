@@ -10,7 +10,7 @@ struct DraggableAppIcon: View {
         AppIconView(app: app, isDragTarget: $isDragTarget)
             .onDrag {
                 appManager.startDragging(app)
-                return NSItemProvider(object: app.name as NSString)
+                return NSItemProvider(object: app.title as NSString)
             }
             .onDrop(of: [.text], delegate: AppDropDelegate(
                 app: app,

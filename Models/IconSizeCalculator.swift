@@ -23,9 +23,12 @@ struct IconSizeCalculator {
 
     // 回退尺寸计算（当没有图标时使用）
     private static func calculateFallbackSize() -> CGSize {
-        // 默认使用2x的回退尺寸
-        let baseSize: CGFloat = 256
-        let displaySize = baseSize * displayScaleFactor
+        let screenScale = NSScreen.main?.backingScaleFactor ?? 2.0
+        // 使用128逻辑点作为基础，转换为物理像素
+        let baseLogicalSize: CGFloat = 128
+        let basePhysicalSize = baseLogicalSize * screenScale
+        // 应用显示系数并转换回逻辑像素
+        let displaySize = basePhysicalSize * displayScaleFactor / screenScale
         return CGSize(width: displaySize, height: displaySize)
     }
 }

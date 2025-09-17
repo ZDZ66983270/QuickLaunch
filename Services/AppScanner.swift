@@ -15,7 +15,8 @@ class AppScanner {
             "/Applications",
             "~/Applications",
             "/System/Applications",
-            "/System/Applications/Utilities"
+            "/System/Applications/Utilities",
+            "/System/Cryptexes/App/System/Applications"
         ]
 
         for path in applicationPaths {
@@ -32,14 +33,24 @@ class AppScanner {
                         guard let bundle = Bundle(url: fileURL) else { continue }
                         guard let bundleIdentifier = bundle.bundleIdentifier else { continue }
 
+                        // 排除不需要显示的应用
+                        let excludedBundleIds = ["com.apple.apps.launcher"]
+                        if excludedBundleIds.contains(bundleIdentifier) {
+                            continue
+                        }
+
                         // 获取应用名称，优先使用本地化名称
                         let appName = getLocalizedAppName(for: fileURL, bundle: bundle)
+
+                        // 获取包名称（去掉 .app 扩展名）
+                        let packageName = fileURL.lastPathComponent.replacingOccurrences(of: ".app", with: "")
 
                         // 去重：只添加之前没见过的bundleIdentifier
                         if !seenBundleIds.contains(bundleIdentifier) {
                             seenBundleIds.insert(bundleIdentifier)
 
-                            let app = AppItem(name: appName,
+                            let app = AppItem(title: appName,
+                                            package_name: packageName,
                                             bundleIdentifier: bundleIdentifier,
                                             url: fileURL,
                                             position: position)

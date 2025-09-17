@@ -32,39 +32,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Additional log suppression for clean console output
 
-        // 延迟设置窗口，确保窗口完全准备好
-        DispatchQueue.main.async {
-            if let window = NSApplication.shared.windows.first {
-                // 先设置基本窗口属性
-                window.titlebarAppearsTransparent = true
-                window.titleVisibility = .hidden
-                window.styleMask.insert(.fullSizeContentView)
-                window.isMovableByWindowBackground = false
-                window.collectionBehavior = [.fullScreenPrimary, .fullScreenAllowsTiling]
+        // 立即设置窗口为全屏，无任何延迟
+        if let window = NSApplication.shared.windows.first {
+            // 设置窗口属性
+            window.titlebarAppearsTransparent = true
+            window.titleVisibility = .hidden
+            window.styleMask.insert(.fullSizeContentView)
+            window.isMovableByWindowBackground = false
+            window.collectionBehavior = [.fullScreenPrimary, .fullScreenAllowsTiling]
 
-                // 获取目标屏幕
-                let mouseLocation = NSEvent.mouseLocation
-                let currentScreen = NSScreen.screens.first { screen in
-                    NSMouseInRect(mouseLocation, screen.frame, false)
-                } ?? NSScreen.main ?? NSScreen.screens.first!
+            // 获取目标屏幕
+            let mouseLocation = NSEvent.mouseLocation
+            let currentScreen = NSScreen.screens.first { screen in
+                NSMouseInRect(mouseLocation, screen.frame, false)
+            } ?? NSScreen.main ?? NSScreen.screens.first!
 
-                // 设置小窗口位置并立即显示
-                let screenFrame = currentScreen.frame
-                let initialSize = NSSize(width: 800, height: 600)
-                let initialFrame = NSRect(
-                    x: screenFrame.origin.x + (screenFrame.width - initialSize.width) / 2,
-                    y: screenFrame.origin.y + (screenFrame.height - initialSize.height) / 2,
-                    width: initialSize.width,
-                    height: initialSize.height
-                )
-                window.setFrame(initialFrame, display: false) // 不立即刷新显示
-                window.makeKeyAndOrderFront(nil) // 显示窗口
-
-                // 使用更短的延迟立即全屏
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                    window.toggleFullScreen(nil)
-                }
-            }
+            // 立即设置为全屏，无延迟
+            let screenFrame = currentScreen.frame
+            window.setFrame(screenFrame, display: true)
+            window.makeKeyAndOrderFront(nil)
+            window.toggleFullScreen(nil)
         }
     }
 

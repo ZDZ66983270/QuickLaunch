@@ -15,10 +15,23 @@ struct ContentView: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                SearchBar(searchText: $appManager.searchText, isSearching: $showingSearch)
-                    .frame(width: 300)
-                    .padding(.top, 35)
-                    .focused($searchFocused)
+                HStack(spacing: 15) {
+                    SearchBar(searchText: $appManager.searchText, isSearching: $showingSearch)
+                        .frame(width: 300)
+                        .focused($searchFocused)
+
+                    // 重置按钮
+                    Button(action: {
+                        appManager.resetToDefaultFirstPageSorting()
+                    }) {
+                        Image(systemName: "arrow.counterclockwise")
+                            .foregroundColor(.white.opacity(0.7))
+                            .font(.system(size: 16))
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .help("重置应用排序")
+                }
+                .padding(.top, 35)
                 
                 HorizontalPageView(
                     currentPage: $appManager.currentPage,

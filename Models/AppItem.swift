@@ -3,7 +3,8 @@ import AppKit
 
 class AppItem: Identifiable, Hashable, Codable, ObservableObject {
     let id = UUID()
-    let name: String
+    let title: String
+    let package_name: String
     let bundleIdentifier: String
     let url: URL
     var position: Int
@@ -14,11 +15,12 @@ class AppItem: Identifiable, Hashable, Codable, ObservableObject {
     private var _iconScaleFactor: CGFloat?
 
     private enum CodingKeys: String, CodingKey {
-        case name, bundleIdentifier, url, position, folderId
+        case title, package_name, bundleIdentifier, url, position, folderId
     }
 
-    init(name: String, bundleIdentifier: String, url: URL, position: Int = 0, folderId: UUID? = nil) {
-        self.name = name
+    init(title: String, package_name: String, bundleIdentifier: String, url: URL, position: Int = 0, folderId: UUID? = nil) {
+        self.title = title
+        self.package_name = package_name
         self.bundleIdentifier = bundleIdentifier
         self.url = url
         self.position = position
