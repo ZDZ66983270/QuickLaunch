@@ -123,8 +123,38 @@ class AppScanner {
     }
 
     private func getNameFromLocalizedStrings(bundle: Bundle, appURL: URL) -> String? {
-        // 检查可能的语言代码变体
-        let languageCodes = ["zh-Hans", "zh-Hans-CN", "zh_CN", "zh"]
+        // 获取系统首选语言列表
+        let preferredLanguages = Locale.preferredLanguages
+
+        // 构建候选语言代码列表（包含系统语言和常见变体）
+        var languageCodes: [String] = []
+
+        for language in preferredLanguages.prefix(3) { // 只检查前3个首选语言
+            languageCodes.append(language)
+
+            // 添加语言的常见变体
+            if language.hasPrefix("zh") {
+                languageCodes.append(contentsOf: ["zh-Hans", "zh-Hans-CN", "zh_CN", "zh"])
+            } else if language.hasPrefix("ja") {
+                languageCodes.append(contentsOf: ["ja", "ja_JP"])
+            } else if language.hasPrefix("fr") {
+                languageCodes.append(contentsOf: ["fr", "fr_FR", "fr_CA"])
+            } else if language.hasPrefix("de") {
+                languageCodes.append(contentsOf: ["de", "de_DE"])
+            } else if language.hasPrefix("es") {
+                languageCodes.append(contentsOf: ["es", "es_ES", "es_419"])
+            } else if language.hasPrefix("en") {
+                languageCodes.append(contentsOf: ["en", "en_US", "en_GB"])
+            }
+
+            // 添加基础语言代码（去掉地区代码）
+            if let baseLanguage = language.split(separator: "-").first {
+                languageCodes.append(String(baseLanguage))
+            }
+        }
+
+        // 去重
+        languageCodes = Array(Set(languageCodes))
 
         for language in languageCodes {
             // 构建本地化字符串文件路径
@@ -161,8 +191,8 @@ class AppScanner {
         // 将 CFTypeRef 转换为 String
         if CFGetTypeID(displayName) == CFStringGetTypeID() {
             let name = displayName as! CFString as String
-            // 如果名称包含中文字符，则认为是有效的本地化名称
-            if containsChineseCharacters(name) {
+            // 如果名称包含非ASCII字符，则认为是有效的本地化名称
+            if containsNonASCIICharacters(name) {
                 return name
             }
         }
@@ -170,11 +200,10 @@ class AppScanner {
         return nil
     }
 
-    private func containsChineseCharacters(_ string: String) -> Bool {
-        // 检查字符串是否包含中文字符
+    private func containsNonASCIICharacters(_ string: String) -> Bool {
+        // 检查字符串是否包含非ASCII字符（表示本地化内容）
         for character in string {
-            let scalar = character.unicodeScalars.first!
-            if scalar.value >= 0x4E00 && scalar.value <= 0x9FFF {
+            if !character.isASCII {
                 return true
             }
         }
