@@ -89,13 +89,7 @@ struct AppIconView: View {
     }
 
     private func calculateIconSize() {
-        guard let mainScreen = NSScreen.main else {
-            iconDisplaySize = CGSize(width: 128, height: 128)
-            return
-        }
-
-        let scaleFactor = mainScreen.backingScaleFactor
-        let preferredBaseSize = IconSizeCalculator.getPreferredBaseSize(for: scaleFactor)
-        iconDisplaySize = IconSizeCalculator.calculateDisplaySize(for: app.icon, preferredBaseSize: preferredBaseSize)
+        // app.icon已经是根据Scale Factor选择的正确尺寸，直接计算显示大小
+        iconDisplaySize = IconSizeCalculator.calculateDisplaySize(for: app.icon)
     }
 }

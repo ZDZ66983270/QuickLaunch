@@ -16,8 +16,8 @@ struct ContentView: View {
             
             VStack(spacing: 0) {
                 SearchBar(searchText: $appManager.searchText, isSearching: $showingSearch)
-                    .padding(.horizontal, 200)
-                    .padding(.top, 40)
+                    .frame(width: 300)
+                    .padding(.top, 35)
                     .focused($searchFocused)
                 
                 HorizontalPageView(
@@ -28,10 +28,10 @@ struct ContentView: View {
                             .environmentObject(appManager))
                     }
                 )
-                .padding(.top, 20)
+                .padding(.top, 55)
                 
                 PageIndicator(currentPage: $appManager.currentPage, pageCount: appManager.numberOfPages())
-                    .padding(.bottom, 30)
+                    .padding(.bottom, 140)
             }
         }
         .onAppear {

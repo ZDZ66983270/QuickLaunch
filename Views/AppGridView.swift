@@ -6,11 +6,11 @@ struct AppGridView: View {
     @EnvironmentObject var appManager: AppManager
     @State private var defaultIconSize: CGSize = CGSize(width: 128, height: 128)
 
-    let columns = Array(repeating: GridItem(.fixed(180), spacing: 40, alignment: .top), count: 7)
+    let columns = Array(repeating: GridItem(.fixed(180), spacing: 0, alignment: .top), count: 7)
 
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
-            LazyVGrid(columns: columns, spacing: 50) {
+            LazyVGrid(columns: columns, spacing: 55) {
                 ForEach(Array(appManager.dragPreviewForPage(pageIndex).enumerated()), id: \.element.id) { index, app in
                     if app.bundleIdentifier == "placeholder" {
                         DragPlaceholder(iconSize: defaultIconSize)
@@ -34,15 +34,7 @@ struct AppGridView: View {
     }
 
     private func calculateDefaultIconSize() {
-        guard let mainScreen = NSScreen.main else {
-            defaultIconSize = CGSize(width: 128, height: 128)
-            return
-        }
-
-        let scaleFactor = mainScreen.backingScaleFactor
-        let preferredBaseSize = IconSizeCalculator.getPreferredBaseSize(for: scaleFactor)
-        let displaySize = preferredBaseSize * IconSizeCalculator.displayScaleFactor
-
-        defaultIconSize = CGSize(width: displaySize, height: displaySize)
+        // 占位符使用回退尺寸计算
+        defaultIconSize = IconSizeCalculator.calculateDisplaySize(for: nil)
     }
 }

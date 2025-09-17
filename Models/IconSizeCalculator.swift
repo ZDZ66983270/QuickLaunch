@@ -2,61 +2,29 @@ import SwiftUI
 import AppKit
 
 struct IconSizeCalculator {
+    // 显示尺寸系数 - 图标资源的实际显示大小 = 图标资源尺寸 × 0.8125
     static let displayScaleFactor: CGFloat = 0.8125
 
+    // 计算图标的最终显示尺寸
     static func calculateDisplaySize(for icon: NSImage?) -> CGSize {
         guard let icon = icon else {
             return calculateFallbackSize()
         }
 
+        let screenScale = NSScreen.main?.backingScaleFactor ?? 2.0
         let iconSize = icon.size
         let maxDimension = max(iconSize.width, iconSize.height)
-        let displaySize = maxDimension * displayScaleFactor
+
+        // 关键修正：物理像素 × 0.8125 ÷ screenScale = 逻辑像素
+        let displaySize = maxDimension * displayScaleFactor / screenScale
 
         return CGSize(width: displaySize, height: displaySize)
     }
 
-    static func calculateDisplaySize(for icon: NSImage?, preferredBaseSize: CGFloat) -> CGSize {
-        guard let icon = icon else {
-            return calculateFallbackSize(baseSize: preferredBaseSize)
-        }
-
-        let iconSize = icon.size
-        let maxDimension = max(iconSize.width, iconSize.height)
-
-        let actualBaseSize = getClosestStandardSize(to: maxDimension, preferred: preferredBaseSize)
-        let displaySize = actualBaseSize * displayScaleFactor
-
-        return CGSize(width: displaySize, height: displaySize)
-    }
-
-    static func getPreferredBaseSize(for scaleFactor: CGFloat) -> CGFloat {
-        switch scaleFactor {
-        case 1.0:
-            return 128
-        case 2.0:
-            return 256
-        case 3.0:
-            return 384
-        case 4.0...:
-            return 512
-        default:
-            return 256
-        }
-    }
-
-    private static func getClosestStandardSize(to actualSize: CGFloat, preferred: CGFloat) -> CGFloat {
-        let standardSizes: [CGFloat] = [128, 256, 384, 512]
-
-        if actualSize <= 0 {
-            return preferred
-        }
-
-        let closest = standardSizes.min { abs($0 - actualSize) < abs($1 - actualSize) }
-        return closest ?? preferred
-    }
-
-    private static func calculateFallbackSize(baseSize: CGFloat = 256) -> CGSize {
+    // 回退尺寸计算（当没有图标时使用）
+    private static func calculateFallbackSize() -> CGSize {
+        // 默认使用2x的回退尺寸
+        let baseSize: CGFloat = 256
         let displaySize = baseSize * displayScaleFactor
         return CGSize(width: displaySize, height: displaySize)
     }

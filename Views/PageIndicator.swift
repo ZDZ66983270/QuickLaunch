@@ -5,11 +5,11 @@ struct PageIndicator: View {
     let pageCount: Int
     
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 10) {
             ForEach(0..<pageCount, id: \.self) { page in
                 Circle()
                     .fill(page == currentPage ? Color.white : Color.white.opacity(0.4))
-                    .frame(width: 8, height: 8)
+                    .frame(width: 7, height: 7)
                     .scaleEffect(page == currentPage ? 1.2 : 1.0)
                     .animation(.spring(response: 0.3, dampingFraction: 0.6), value: currentPage)
                     .onTapGesture {

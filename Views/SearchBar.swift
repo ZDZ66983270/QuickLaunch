@@ -9,17 +9,25 @@ struct SearchBar: View {
         HStack {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(.gray)
-            
-            TextField("Search", text: $searchText)
-                .textFieldStyle(PlainTextFieldStyle())
-                .foregroundColor(.white)
-                .focused($isFocused)
-                .onSubmit {
-                    isSearching = false
+
+            ZStack(alignment: .leading) {
+                if searchText.isEmpty {
+                    Text("Search")
+                        .foregroundColor(.gray)
+                        .allowsHitTesting(false)
                 }
-                .onChange(of: searchText) { _, newValue in
-                    isSearching = !newValue.isEmpty
-                }
+
+                TextField("", text: $searchText)
+                    .textFieldStyle(PlainTextFieldStyle())
+                    .foregroundColor(.white)
+                    .focused($isFocused)
+                    .onSubmit {
+                        isSearching = false
+                    }
+                    .onChange(of: searchText) { _, newValue in
+                        isSearching = !newValue.isEmpty
+                    }
+            }
             
             if !searchText.isEmpty {
                 Button(action: {
@@ -32,7 +40,9 @@ struct SearchBar: View {
                 .buttonStyle(PlainButtonStyle())
             }
         }
-        .padding(8)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 5)
+        .frame(height: 28)
         .background(
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.black.opacity(0.3))
