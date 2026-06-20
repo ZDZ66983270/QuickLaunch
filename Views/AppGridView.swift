@@ -37,9 +37,20 @@ struct AppGridView: View {
             }
 
             if appManager.draggedFolder != nil {
-                appManager.moveDraggedFolderToEnd(of: pageIndex)
+                if appManager.dragHoverPage == pageIndex,
+                   let hoverIndex = appManager.dragHoverIndex {
+                    appManager.moveDraggedFolder(to: pageIndex, index: hoverIndex)
+                } else {
+                    appManager.moveDraggedFolderToEnd(of: pageIndex)
+                }
             } else {
-                appManager.moveDraggedAppToEnd(of: pageIndex)
+                if appManager.dragHoverPage == pageIndex,
+                   let hoverIndex = appManager.dragHoverIndex,
+                   appManager.groupingTargetApp == nil {
+                    appManager.moveDraggedApp(to: pageIndex, index: hoverIndex)
+                } else {
+                    appManager.moveDraggedAppToEnd(of: pageIndex)
+                }
             }
             appManager.endDragging()
             return true
