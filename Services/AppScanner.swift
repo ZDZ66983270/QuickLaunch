@@ -108,13 +108,11 @@ class AppScanner {
     }
     
     func getRecentApps() -> [AppItem] {
-        var recentApps: [AppItem] = []
-
         // Note: LSSharedFileList API is deprecated in newer macOS versions
         // For now, we'll return an empty array
         // Alternative: Could use NSWorkspace's recently used applications
 
-        return recentApps
+        return []
     }
 
     private func getLocalizedAppName(for appURL: URL, bundle: Bundle) -> String {

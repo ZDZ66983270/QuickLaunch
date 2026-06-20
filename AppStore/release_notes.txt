@@ -1,0 +1,58 @@
+QuickLaunch v1.3.0 - Release Notes
+
+NEW FEATURES:
+• Modern app launcher with grid-based interface
+• Lightning-fast application launching with ESC key
+• Real-time search with instant filtering
+• Drag and drop app reordering with visual feedback
+• Context menu support for additional actions
+• Automatic application discovery from all standard directories
+• Optimized performance with intelligent caching
+
+INTERFACE IMPROVEMENTS:
+• Beautiful dark theme that matches macOS design language
+• Smooth animations and hover effects
+• Dynamic icon sizing that adapts to display resolution
+• Fullscreen interface that maximizes screen real estate
+• Page navigation with smooth transitions
+• High-resolution display support for crisp icons
+
+PERFORMANCE ENHANCEMENTS:
+• Persistent caching for instant app loading
+• Background app discovery and updates
+• Memory-efficient icon handling
+• Optimized for both Apple Silicon and Intel Macs
+
+PRODUCTIVITY FEATURES:
+• Show in Finder integration
+• Get Info quick access
+• Keyboard-friendly navigation
+• Persistent layout preferences
+• Multi-page organization
+• Quick dismiss with ESC or mouse click
+
+TECHNICAL IMPROVEMENTS:
+• Built for macOS 14+ with modern APIs
+• Sandbox-compatible design
+• Comprehensive error handling and crash protection
+• Secure application launching
+• Local-only data storage (no tracking or analytics)
+
+ACCESSIBILITY:
+• VoiceOver compatibility
+• Keyboard navigation support
+• High contrast theme support
+• Intuitive user interface
+
+Perfect for power users, creative professionals, and anyone who wants fast, visual access to their applications. QuickLaunch brings back the beloved LaunchPad experience with modern enhancements and superior performance.
+
+What's Next:
+We're committed to continuously improving QuickLaunch based on user feedback. Future updates may include folder organization, custom themes, and additional productivity features.
+
+System Requirements:
+• macOS 14.0 or later
+• Compatible with all Mac models (Apple Silicon and Intel)
+• Approximately 5MB of disk space
+
+Privacy:
+QuickLaunch respects your privacy - no data collection, no tracking, no analytics. All information stays on your Mac.

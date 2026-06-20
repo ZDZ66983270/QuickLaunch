@@ -90,14 +90,61 @@ class AppItem: Identifiable, Hashable, Codable, ObservableObject {
 }
 
 struct AppFolder: Identifiable, Hashable, Codable {
-    let id = UUID()
+    let id: UUID
     var name: String
     var apps: [AppItem]
     var position: Int
-    
-    init(name: String, apps: [AppItem] = [], position: Int = 0) {
+
+    private enum CodingKeys: String, CodingKey {
+        case id, name, apps, position
+    }
+
+    init(id: UUID = UUID(), name: String, apps: [AppItem] = [], position: Int = 0) {
+        self.id = id
         self.name = name
         self.apps = apps
         self.position = position
+    }
+}
+
+enum GridEntry: Identifiable, Hashable {
+    case app(AppItem)
+    case folder(AppFolder)
+    case placeholder(Int)
+
+    var id: String {
+        switch self {
+        case .app(let app):
+            return "app-\(app.bundleIdentifier)"
+        case .folder(let folder):
+            return "folder-\(folder.id.uuidString)"
+        case .placeholder(let index):
+            return "placeholder-\(index)"
+        }
+    }
+
+    var position: Int {
+        switch self {
+        case .app(let app):
+            return app.position
+        case .folder(let folder):
+            return folder.position
+        case .placeholder(let index):
+            return index
+        }
+    }
+}
+
+enum DraggedGridItem: Hashable {
+    case app(AppItem)
+    case folder(AppFolder)
+
+    var id: String {
+        switch self {
+        case .app(let app):
+            return "app-\(app.bundleIdentifier)"
+        case .folder(let folder):
+            return "folder-\(folder.id.uuidString)"
+        }
     }
 }

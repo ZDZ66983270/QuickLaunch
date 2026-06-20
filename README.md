@@ -1,107 +1,102 @@
-# LaunchPad Clone
+# QuickLaunch
 
-一个模仿 macOS Launch Pad 功能的应用程序，在 macOS 26 取消原生 Launch Pad 后提供类似的应用启动体验。
+QuickLaunch is a macOS app launcher inspired by the native Launchpad experience.  
+QuickLaunch 是一个参考 macOS 原生启动台体验的应用启动器。
 
-## 功能特点
+It supports app search, paging, drag-and-drop sorting, and folder creation.  
+它支持应用搜索、分页浏览、拖拽排序，以及文件夹创建与整理。
 
-- 🚀 快速启动系统中的所有应用程序
-- 🔍 实时搜索和过滤应用
-- 📱 网格布局显示应用图标
-- 🎨 美观的毛玻璃背景效果
-- 📄 分页浏览大量应用
-- 🖱️ 支持拖拽排序
-- 💫 流畅的动画效果
+## Highlights | 功能特点
 
-## 系统要求
+- Fast app discovery and launch  
+  快速扫描并启动本机应用
+- Search and filter in real time  
+  实时搜索和筛选应用
+- Launchpad-style paged grid  
+  启动台风格的分页网格布局
+- Drag to reorder and group apps into folders  
+  支持拖拽排序并拖入生成文件夹
+- Wallpaper-synced background experience  
+  背景支持与系统壁纸同步
 
-- macOS 13.0 或更高版本
-- Xcode 15.0 或更高版本（用于编译）
-- Swift 5.9 或更高版本
+## Project Contents | 仓库内容
 
-## 编译和运行
+This repository is prepared for source-code sharing and DMG distribution.  
+这个仓库已经整理为“源码 + DMG 安装包”同时可上传的形式。
 
-### 方法一：使用 Make 命令
+Included files:
+
+- Source code | 源码
+- `dist/QuickLaunch-portable.dmg`
+- Packaging scripts | 打包脚本
+
+## Build | 构建
 
 ```bash
-# 编译项目
 make build
+make app
+make dist
+make dmg
+```
 
-# 直接运行
+Generated output:
+
+```text
+dist/
+├── QuickLaunch-portable.dmg
+├── QuickLaunch-portable.zip
+└── README_Distribution_Guide.txt
+```
+
+## Run | 运行
+
+```bash
 make run
-
-# 创建 macOS 应用包
-make app
-
-# 安装到 Applications 文件夹
-sudo make install
-
-# 清理编译文件
-make clean
 ```
 
-### 方法二：使用 Swift Package Manager
+or open the packaged app:
 
 ```bash
-# 编译
-swift build -c release
-
-# 运行
-swift run
+open build/QuickLaunch.app
 ```
 
-### 方法三：创建可分发的应用
+## Repository Structure | 目录结构
 
-```bash
-# 创建应用包
-make app
-
-# 打开应用
-open build/LaunchPadClone.app
+```text
+QuickLaunch/
+├── QuickLaunchApp.swift
+├── Models/
+├── Services/
+├── ViewModels/
+├── Views/
+├── Resources/
+├── dist/
+├── docs/
+├── AppStore/
+├── CodeSigning/
+└── Legal/
 ```
 
-## 使用说明
+## Attribution | 署名说明
 
-1. **启动应用**：双击应用图标或使用命令行运行
-2. **搜索应用**：在顶部搜索框输入应用名称进行过滤
-3. **启动应用**：单击应用图标即可启动
-4. **翻页**：点击底部的页面指示器或使用手势翻页
-5. **右键菜单**：右键点击应用图标可以查看更多选项
+This codebase is based on work by David Jia and has been optimized by Codex.  
+本代码基于 David Jia 的作品，并由 Codex 进行优化整理。
 
-## 快捷键
+## Usage Terms | 使用条款
 
-- `Command + Q`：退出应用
-- `Command + F`：聚焦搜索框
-- `Escape`：清空搜索
+Free for personal use only. Commercial use is not allowed.  
+仅限个人免费使用，不可用于商业用途。
 
-## 项目结构
+## Distribution Notes | 分发说明
 
-```
-LaunchPadClone/
-├── LaunchPadApp.swift      # 应用入口
-├── Models/                  # 数据模型
-│   └── AppItem.swift       # 应用项模型
-├── Views/                   # 视图组件
-│   ├── ContentView.swift   # 主视图
-│   ├── AppGridView.swift   # 应用网格
-│   ├── AppIconView.swift   # 应用图标
-│   ├── SearchBar.swift     # 搜索栏
-│   └── PageIndicator.swift # 页面指示器
-├── ViewModels/             # 视图模型
-│   └── AppManager.swift    # 应用管理器
-├── Services/               # 服务层
-│   └── AppScanner.swift    # 应用扫描器
-└── Resources/              # 资源文件
-```
+If macOS blocks the app on first launch:
 
-## 已知问题
+1. Right-click `QuickLaunch.app`
+2. Choose `Open`
+3. Confirm again in the system dialog
 
-- LSSharedFileList API 在新版本 macOS 中可能被弃用
-- 某些系统应用可能无法正确显示图标
+如果 macOS 首次拦截应用：
 
-## 许可证
-
-MIT License
-
-## 贡献
-
-欢迎提交 Issue 和 Pull Request！
+1. 右键 `QuickLaunch.app`
+2. 选择“打开”
+3. 在系统弹窗中再次确认“打开”

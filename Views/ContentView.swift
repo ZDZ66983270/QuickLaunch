@@ -4,18 +4,23 @@ import AppKit
 struct ContentView: View {
     @EnvironmentObject var appManager: AppManager
     @State private var showingSearch = false
+    @State private var wallpaperImage: NSImage?
+    @State private var wallpaperURL: URL?
     @FocusState private var searchFocused: Bool
+    private let wallpaperRefreshTimer = Timer.publish(every: 2.0, on: .main, in: .common).autoconnect()
 
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // 背景层，可以点击最小化
-                Color(red: 0x7c/255.0, green: 0x7c/255.0, blue: 0x7c/255.0)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                DesktopWallpaperBackground(image: wallpaperImage)
                     .ignoresSafeArea()
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        minimizeWindow()
+                        if appManager.expandedFolder != nil {
+                            appManager.closeFolder()
+                        } else {
+                            minimizeWindow()
+                        }
                     }
 
                 GeometryReader { geometry in
@@ -50,7 +55,7 @@ struct ContentView: View {
                         currentPage: $appManager.currentPage,
                         pageCount: appManager.numberOfPages(),
                         content: (0..<appManager.numberOfPages()).map { page in
-                            AnyView(AppGridView(apps: [], pageIndex: page)
+                            AnyView(AppGridView(pageIndex: page)
                                 .environmentObject(appManager))
                         }
                     )
@@ -64,6 +69,11 @@ struct ContentView: View {
 
                     Spacer(minLength: bottomSpacing) // 根据屏幕高度动态设置指示器下方空间
                     }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        // Consume taps inside the main content area so controls like
+                        // the page indicator do not bubble up to the background exit action.
+                    }
                     .onAppear {
                         appManager.updateLayoutForScreenHeight(screenHeight)
                     }
@@ -71,22 +81,59 @@ struct ContentView: View {
                         appManager.updateLayoutForScreenHeight(newHeight)
                     }
                 }
-                .onTapGesture {
-                    minimizeWindow()
+
+                if let folder = appManager.expandedFolder {
+                    FolderExpandedView(folder: folder)
+                        .environmentObject(appManager)
+                        .transition(.opacity.combined(with: .scale))
+                        .zIndex(2)
                 }
             }
         }
         .onAppear {
             appManager.loadApps()
+            refreshWallpaper()
             searchFocused = true
         }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            refreshWallpaper()
             searchFocused = true
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSWorkspace.activeSpaceDidChangeNotification)) { _ in
+            refreshWallpaper(force: true)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didChangeScreenParametersNotification)) { _ in
+            refreshWallpaper(force: true)
+        }
+        .onReceive(wallpaperRefreshTimer) { _ in
+            guard NSApplication.shared.isActive else { return }
+            refreshWallpaper()
         }
     }
 
     private func minimizeWindow() {
-        NSApplication.shared.terminate(nil)
+        hideQuickLaunchApp()
+    }
+
+    private func refreshWallpaper(force: Bool = false) {
+        let mouseLocation = NSEvent.mouseLocation
+        let currentScreen = NSScreen.screens.first { screen in
+            NSMouseInRect(mouseLocation, screen.frame, false)
+        } ?? NSApplication.shared.windows.first?.screen ?? NSScreen.main ?? NSScreen.screens.first
+
+        guard let screen = currentScreen,
+              let newWallpaperURL = NSWorkspace.shared.desktopImageURL(for: screen) else {
+            wallpaperImage = nil
+            wallpaperURL = nil
+            return
+        }
+
+        guard force || newWallpaperURL != wallpaperURL || wallpaperImage == nil else {
+            return
+        }
+
+        wallpaperURL = newWallpaperURL
+        wallpaperImage = NSImage(contentsOf: newWallpaperURL)
     }
 }
 
@@ -105,5 +152,48 @@ struct VisualEffectBlur: NSViewRepresentable {
     func updateNSView(_ nsView: NSVisualEffectView, context: Context) {
         nsView.material = material
         nsView.blendingMode = blendingMode
+    }
+}
+
+struct DesktopWallpaperBackground: View {
+    let image: NSImage?
+
+    var body: some View {
+        ZStack {
+            if let image {
+                Image(nsImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .clipped()
+            } else {
+                Color(red: 0x7c / 255.0, green: 0x7c / 255.0, blue: 0x7c / 255.0)
+            }
+
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            Color.black.opacity(0.08),
+                            Color.black.opacity(0.18)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+
+            Rectangle()
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            Color.white.opacity(0.12),
+                            Color.clear
+                        ],
+                        center: .top,
+                        startRadius: 40,
+                        endRadius: 820
+                    )
+                )
+        }
     }
 }

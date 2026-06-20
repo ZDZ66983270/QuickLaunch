@@ -5,19 +5,19 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleExecutable</key>
-    <string>LaunchPadClone</string>
+    <string>QuickLaunch</string>
     <key>CFBundleIdentifier</key>
-    <string>com.example.launchpadclone</string>
+    <string>com.quicklaunch.macos</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>LaunchPad Clone</string>
+    <string>QuickLaunch</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
+    <string>1.3.0</string>
     <key>CFBundleVersion</key>
-    <string>1</string>
+    <string>130</string>
     <key>LSMinimumSystemVersion</key>
     <string>14.0</string>
     <key>NSHighResolutionCapable</key>
@@ -28,7 +28,26 @@
     <true/>
     <key>NSMainStoryboardFile</key>
     <string></string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.productivity</string>
+    <key>NSHumanReadableCopyright</key>
+    <string>Copyright © 2024 QuickLaunch. All rights reserved.</string>
+    <key>CFBundleDisplayName</key>
+    <string>QuickLaunch</string>
+    <key>LSMinimumSystemVersionByArchitecture</key>
+    <dict>
+        <key>arm64</key>
+        <string>14.0</string>
+        <key>x86_64</key>
+        <string>14.0</string>
+    </dict>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>QuickLaunch needs to send Apple Events to launch applications on your behalf.</string>
+    <key>LSUIElement</key>
+    <false/>
 </dict>
 </plist>

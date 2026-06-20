@@ -2,31 +2,61 @@ import SwiftUI
 
 struct AppDropDelegate: DropDelegate {
     let app: AppItem
+    let pageIndex: Int
     let index: Int
     let appManager: AppManager
     @Binding var isDragTarget: Bool
+    @Binding var groupingTimer: Timer?
 
     func performDrop(info: DropInfo) -> Bool {
-        guard let draggedApp = appManager.draggedApp else {
+        defer {
+            invalidateGroupingTimer()
             isDragTarget = false
+            appManager.endDragging()
+        }
+
+        guard appManager.draggedApp != nil || appManager.draggedFolder != nil else {
             return false
         }
 
-        // 设置最终的悬停位置，让endDragging处理移动
-        appManager.setDragHover(at: index)
+        if appManager.draggedApp != nil, appManager.isGroupingCandidate(app) {
+            appManager.createFolderFromDraggedApp(over: app)
+        } else if appManager.draggedFolder != nil {
+            appManager.moveDraggedFolder(to: pageIndex, index: index)
+        } else {
+            appManager.moveDraggedApp(to: pageIndex, index: index)
+        }
 
-        isDragTarget = false
-        appManager.endDragging()
         return true
     }
 
     func dropEntered(info: DropInfo) {
-        guard let draggedApp = appManager.draggedApp else { return }
-
-        if draggedApp.id != app.id {
+        if appManager.draggedFolder != nil {
             withAnimation(.easeInOut(duration: 0.15)) {
                 isDragTarget = true
-                appManager.setDragHover(at: index)
+            }
+            appManager.setDragHover(page: pageIndex, at: index)
+            appManager.setDragHoverApp(nil)
+            appManager.setDragHoverFolder(nil)
+            return
+        }
+
+        guard let draggedApp = appManager.draggedApp,
+              draggedApp.bundleIdentifier != app.bundleIdentifier else {
+            return
+        }
+
+        withAnimation(.easeInOut(duration: 0.15)) {
+            isDragTarget = true
+        }
+        appManager.setDragHover(page: pageIndex, at: index)
+        appManager.setDragHoverApp(app)
+        appManager.setDragHoverFolder(nil)
+
+        invalidateGroupingTimer()
+        groupingTimer = Timer.scheduledTimer(withTimeInterval: 0.45, repeats: false) { _ in
+            DispatchQueue.main.async {
+                appManager.beginGrouping(over: app)
             }
         }
     }
@@ -35,18 +65,29 @@ struct AppDropDelegate: DropDelegate {
         withAnimation(.easeInOut(duration: 0.15)) {
             isDragTarget = false
         }
+        invalidateGroupingTimer()
+        appManager.setDragHoverApp(nil)
+        appManager.setDragHoverFolder(nil)
+        appManager.cancelGrouping(over: app)
     }
 
     func dropUpdated(info: DropInfo) -> DropProposal? {
-        return DropProposal(operation: .move)
+        DropProposal(operation: .move)
     }
 
     func validateDrop(info: DropInfo) -> Bool {
-        // 不允许拖拽到占位符上
-        guard app.bundleIdentifier != "placeholder" else {
-            return false
+        guard appManager.canOrganize else { return false }
+
+        if appManager.draggedFolder != nil {
+            return true
         }
 
-        return appManager.draggedApp != nil && appManager.draggedApp?.id != app.id
+        return appManager.draggedApp != nil &&
+        appManager.draggedApp?.bundleIdentifier != app.bundleIdentifier
+    }
+
+    private func invalidateGroupingTimer() {
+        groupingTimer?.invalidate()
+        groupingTimer = nil
     }
 }

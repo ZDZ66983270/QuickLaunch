@@ -1,0 +1,61 @@
+QuickLaunch - The Ultimate macOS Application Launcher
+
+Transform your Mac experience with QuickLaunch, a powerful and elegant application launcher designed specifically for macOS 14 and later. Inspired by the classic macOS LaunchPad, QuickLaunch brings back the familiar grid-based interface with modern enhancements and improved performance.
+
+KEY FEATURES:
+
+🚀 Lightning Fast Launch
+• Instant access to all your applications with a single keystroke (ESC)
+• Optimized performance with intelligent caching
+• Smooth animations and responsive interface
+
+📱 Intuitive Grid Interface
+• Clean, organized app grid with customizable layout
+• Dynamic icon sizing that adapts to your display
+• Support for high-resolution displays and multiple screen densities
+
+🔍 Smart Search
+• Real-time search filtering as you type
+• Find apps instantly without scrolling through pages
+• Keyboard-friendly navigation
+
+✋ Drag & Drop Reordering
+• Easily reorganize your apps by dragging and dropping
+• Visual feedback during drag operations
+• Persistent layout that remembers your preferences
+
+⚡ Powerful Features
+• Right-click context menus for quick actions
+• Show in Finder and Get Info options
+• Automatic app discovery from all standard directories
+• Support for both system and user-installed applications
+
+🎨 Polished User Experience
+• Beautiful dark theme that matches macOS design language
+• Smooth page transitions and hover effects
+• Fullscreen interface that maximizes screen real estate
+• Press ESC or click to quickly dismiss and return to your work
+
+PERFECT FOR:
+• Power users who want quick access to applications
+• Users with many installed applications
+• Anyone who prefers visual app browsing over Spotlight
+• Mac users who miss the classic LaunchPad functionality
+
+SYSTEM REQUIREMENTS:
+• macOS 14.0 or later
+• Compatible with Apple Silicon and Intel Macs
+• Optimized for all Mac display sizes and resolutions
+
+PRIVACY & SECURITY:
+• No data collection or tracking
+• All app scanning happens locally on your Mac
+• Secure application launching using system APIs
+• Sandbox-compatible design
+
+WHY CHOOSE QUICKLAUNCH:
+Unlike other launchers that try to do everything, QuickLaunch focuses on one thing and does it exceptionally well: giving you fast, visual access to your applications. It's lightweight, reliable, and designed to feel like a natural part of macOS.
+
+Whether you're a creative professional managing dozens of specialized tools, a developer with multiple IDEs and utilities, or simply someone who wants a better way to organize and launch applications, QuickLaunch is the perfect solution.
+
+Download QuickLaunch today and experience the fastest way to launch applications on your Mac!

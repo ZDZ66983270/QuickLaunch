@@ -2,23 +2,23 @@
 import PackageDescription
 
 let package = Package(
-    name: "LaunchPadClone",
+    name: "QuickLaunch",
     platforms: [
         .macOS(.v14)
     ],
     products: [
         .executable(
-            name: "LaunchPadClone",
-            targets: ["LaunchPadClone"]
+            name: "QuickLaunch",
+            targets: ["QuickLaunch"]
         )
     ],
     targets: [
         .executableTarget(
-            name: "LaunchPadClone",
+            name: "QuickLaunch",
             path: ".",
-            exclude: ["Resources", "README.md", "Makefile", "Info.plist"],
+            exclude: ["README.md", "Makefile", "Info.plist"],
             sources: [
-                "LaunchPadApp.swift",
+                "QuickLaunchApp.swift",
                 "Models/AppItem.swift",
                 "Models/IconSizeCalculator.swift",
                 "ViewModels/AppManager.swift",
@@ -28,10 +28,14 @@ let package = Package(
                 "Views/AppIconView.swift",
                 "Views/DraggableAppIcon.swift",
                 "Views/AppDropDelegate.swift",
+                "Views/FolderView.swift",
                 "Views/DragPlaceholder.swift",
                 "Views/SearchBar.swift",
                 "Views/PageIndicator.swift",
                 "Views/HorizontalPageView.swift"
+            ],
+            resources: [
+                .process("Resources")
             ]
         )
     ]

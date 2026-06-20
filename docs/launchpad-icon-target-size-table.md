@@ -1,6 +1,4 @@
-
-
-### Launchpad 图标目标显示尺寸表
+### Launchpad Icon Target Size Table | Launchpad 图标目标显示尺寸表
 
 | Scale factor  | 基准资源                   | 渲染目标大小 (px)                              | 计算公式 (≈0.8125×资源大小) |
 | ------------- | ---------------------- | ---------------------------------------- | ------------------- |
@@ -10,9 +8,13 @@
 | 4× (超高分屏)     | 512×512                | **416 px**                               | 512 × 0.8125 = 416  |
 
 
-如果你在做自己的 Launchpad，可以直接下面的规则
+Usage notes | 使用建议
 
-- 根据Scale factor 来选择应用程序合适的图标文件
-- 为了优化显示效果，实际应用图标的时候，对其尺寸乘以 0.8125来实际显示
-- 一定要动态计算后显示，不能想当然的用固定值，因为应用程序的图标可能不标准
-- 其他界面相关的元素的尺寸不要改变 
+- Choose the source icon size based on the current scale factor
+- 根据当前 Scale factor 选择合适的原始图标资源
+- Multiply the icon size by `0.8125` for the final rendered size
+- 实际渲染时，建议将图标尺寸乘以 `0.8125`
+- Compute the displayed size dynamically instead of hard-coding a fixed value
+- 不要写死固定值，最好动态计算实际显示尺寸
+- Keep other surrounding layout metrics unchanged
+- 其他界面相关元素的尺寸建议保持不变

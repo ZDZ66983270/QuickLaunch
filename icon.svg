@@ -1,0 +1,116 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景渐变 -->
+  <defs>
+    <!-- 主背景渐变 - 柔和浅色调 -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8EBFC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F0E6F7;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 图标渐变 -->
+    <linearGradient id="iconGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD93D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF9A00;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="iconGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6BCF7F;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#29B366;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="iconGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B9D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E63946;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="iconGradient4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#66D9EF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4ECDC4;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="iconGradient5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#A78BFA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="iconGradient6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FB923C;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F97316;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 阴影滤镜 -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="0" dy="1" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- 圆角背景 -->
+  <rect x="0" y="0" width="512" height="512" rx="112" ry="112" fill="url(#bgGradient)"/>
+  
+  <!-- 4x4 网格矩阵布局 -->
+  <g transform="translate(256, 256)">
+    <!-- 第一行 -->
+    <rect x="-160" y="-160" width="70" height="70" rx="14" fill="url(#iconGradient1)" filter="url(#shadow)" opacity="0.95"/>
+    <rect x="-160" y="-160" width="70" height="70" rx="14" fill="none" stroke="white" stroke-width="2" opacity="0.2"/>
+    
+    <rect x="-80" y="-160" width="70" height="70" rx="14" fill="url(#iconGradient2)" filter="url(#shadow)" opacity="0.95"/>
+    <circle cx="-45" cy="-125" r="23" fill="white" opacity="0.85"/>
+    
+    <rect x="0" y="-160" width="70" height="70" rx="14" fill="url(#iconGradient3)" filter="url(#shadow)" opacity="0.95"/>
+    <path d="M 20 -125 L 50 -125 L 35 -140 Z" fill="white" opacity="0.85"/>
+    
+    <rect x="80" y="-160" width="70" height="70" rx="14" fill="url(#iconGradient4)" filter="url(#shadow)" opacity="0.95"/>
+    <rect x="97" y="-143" width="36" height="36" rx="7" fill="white" opacity="0.85"/>
+    
+    <!-- 第二行 -->
+    <rect x="-160" y="-80" width="70" height="70" rx="14" fill="url(#iconGradient5)" filter="url(#shadow)" opacity="0.95"/>
+    <path d="M -140 -45 L -125 -60 L -110 -45 L -125 -30 Z" fill="white" opacity="0.85"/>
+    
+    <rect x="-80" y="-80" width="70" height="70" rx="14" fill="url(#iconGradient6)" filter="url(#shadow)" opacity="0.95"/>
+    <rect x="-62" y="-62" width="34" height="34" rx="17" fill="white" opacity="0.85"/>
+    
+    <rect x="0" y="-80" width="70" height="70" rx="14" fill="url(#iconGradient1)" filter="url(#shadow)" opacity="0.95"/>
+    <polygon points="35,-60 17,-25 53,-25" fill="white" opacity="0.85"/>
+    
+    <rect x="80" y="-80" width="70" height="70" rx="14" fill="url(#iconGradient2)" filter="url(#shadow)" opacity="0.95"/>
+    <rect x="80" y="-80" width="70" height="70" rx="14" fill="none" stroke="white" stroke-width="2" opacity="0.2"/>
+    
+    <!-- 第三行 -->
+    <rect x="-160" y="0" width="70" height="70" rx="14" fill="url(#iconGradient3)" filter="url(#shadow)" opacity="0.95"/>
+    <circle cx="-125" cy="35" r="20" fill="none" stroke="white" stroke-width="4" opacity="0.85"/>
+    
+    <rect x="-80" y="0" width="70" height="70" rx="14" fill="url(#iconGradient4)" filter="url(#shadow)" opacity="0.95"/>
+    <rect x="-80" y="0" width="70" height="70" rx="14" fill="none" stroke="white" stroke-width="2" opacity="0.2"/>
+    
+    <rect x="0" y="0" width="70" height="70" rx="14" fill="url(#iconGradient5)" filter="url(#shadow)" opacity="0.95"/>
+    <path d="M 20 50 L 50 50 L 35 20 Z" fill="white" opacity="0.85"/>
+    
+    <rect x="80" y="0" width="70" height="70" rx="14" fill="url(#iconGradient6)" filter="url(#shadow)" opacity="0.95"/>
+    <rect x="97" y="17" width="36" height="36" rx="5" fill="white" opacity="0.85"/>
+    
+    <!-- 第四行 -->
+    <rect x="-160" y="80" width="70" height="70" rx="14" fill="url(#iconGradient2)" filter="url(#shadow)" opacity="0.95"/>
+    <polygon points="-125,100 -143,135 -107,135" fill="white" opacity="0.85"/>
+    
+    <rect x="-80" y="80" width="70" height="70" rx="14" fill="url(#iconGradient1)" filter="url(#shadow)" opacity="0.95"/>
+    <circle cx="-45" cy="115" r="23" fill="white" opacity="0.85"/>
+    
+    <rect x="0" y="80" width="70" height="70" rx="14" fill="url(#iconGradient4)" filter="url(#shadow)" opacity="0.95"/>
+    <path d="M 20 115 L 35 100 L 50 115 L 35 130 Z" fill="white" opacity="0.85"/>
+    
+    <rect x="80" y="80" width="70" height="70" rx="14" fill="url(#iconGradient3)" filter="url(#shadow)" opacity="0.95"/>
+    <rect x="80" y="80" width="70" height="70" rx="14" fill="none" stroke="white" stroke-width="2" opacity="0.2"/>
+  </g>
+  
+  <!-- 细微的内发光效果 -->
+  <rect x="10" y="10" width="492" height="492" rx="102" ry="102" fill="none" 
+        stroke="white" stroke-width="2" opacity="0.3"/>
+</svg>

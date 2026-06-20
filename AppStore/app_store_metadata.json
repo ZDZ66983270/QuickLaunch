@@ -1,0 +1,106 @@
+{
+  "app_info": {
+    "name": "QuickLaunch",
+    "bundle_id": "com.quicklaunch.macos",
+    "version": "1.3.0",
+    "build_number": "130",
+    "category": "Productivity",
+    "subcategory": "System Tools",
+    "copyright": "© 2024 QuickLaunch. All rights reserved.",
+    "age_rating": "4+",
+    "languages": ["English"]
+  },
+  "descriptions": {
+    "short_description": "Modern macOS app launcher",
+    "subtitle": "Fast, visual application launching",
+    "promotional_text": "The ultimate replacement for macOS LaunchPad with modern features and lightning-fast performance.",
+    "keywords": [
+      "launcher",
+      "applications",
+      "productivity",
+      "utilities",
+      "dock",
+      "finder",
+      "spotlight",
+      "launchpad",
+      "quick",
+      "fast",
+      "organize",
+      "grid",
+      "search"
+    ]
+  },
+  "pricing": {
+    "model": "Free",
+    "price": "$0.00",
+    "in_app_purchases": false
+  },
+  "technical_info": {
+    "minimum_os": "macOS 14.0",
+    "supported_devices": [
+      "Mac with Apple Silicon",
+      "Mac with Intel processor"
+    ],
+    "size_estimate": "< 5 MB",
+    "languages_supported": ["English"],
+    "accessibility": [
+      "VoiceOver support",
+      "Keyboard navigation",
+      "High contrast support"
+    ]
+  },
+  "features": [
+    "Lightning-fast app launching with ESC key",
+    "Beautiful grid-based interface",
+    "Real-time search filtering",
+    "Drag and drop app reordering",
+    "Context menu actions",
+    "Automatic app discovery",
+    "High-resolution display support",
+    "Dark theme design",
+    "Fullscreen interface",
+    "Persistent layout preferences"
+  ],
+  "privacy": {
+    "data_collection": "None",
+    "tracking": false,
+    "third_party_analytics": false,
+    "local_storage_only": true,
+    "network_usage": "None"
+  },
+  "support": {
+    "website": "[To be added]",
+    "email": "[To be added]",
+    "documentation": "Built-in help and intuitive interface"
+  },
+  "screenshots_needed": [
+    {
+      "filename": "screenshot_1_main_interface.png",
+      "description": "Main application interface showing app grid"
+    },
+    {
+      "filename": "screenshot_2_search.png",
+      "description": "Search functionality with real-time filtering"
+    },
+    {
+      "filename": "screenshot_3_launch_app.png",
+      "description": "App launching with hover effects"
+    },
+    {
+      "filename": "screenshot_4_drag_drop.png",
+      "description": "Drag and drop reordering functionality"
+    },
+    {
+      "filename": "screenshot_5_context_menu.png",
+      "description": "Right-click context menu options"
+    }
+  ],
+  "review_guidelines_compliance": {
+    "app_functionality": "Fully functional launcher application",
+    "user_interface": "Native macOS design following Apple HIG",
+    "performance": "Optimized with caching and efficient algorithms",
+    "privacy": "No data collection, full transparency",
+    "security": "Sandbox compatible, secure app launching",
+    "content": "Family-friendly, productivity focused"
+  }
+}

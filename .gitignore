@@ -113,7 +113,11 @@ test.log
 .build/
 build/
 *.app
-LaunchPadClone.app/
+QuickLaunch.app/
+*.backup
+dist/.DS_Store
+dist/*.zip
+Testing/results/
 
 # IDE
 .vscode/

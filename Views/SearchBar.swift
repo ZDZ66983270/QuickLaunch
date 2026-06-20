@@ -12,7 +12,7 @@ struct SearchBar: View {
 
             ZStack(alignment: .leading) {
                 if searchText.isEmpty {
-                    Text("Search")
+                    Text("搜索应用")
                         .foregroundColor(.gray)
                         .allowsHitTesting(false)
                 }
