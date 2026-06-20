@@ -1,6 +1,6 @@
 # QuickLaunch App Store Preparation Summary | QuickLaunch App Store 准备工作总结
 
-**项目名称**: QuickLaunch (原 LaunchPadClone)
+**项目名称**: QuickLaunch
 **完成日期**: 2024年9月18日
 **当前状态**: 已准备好提交App Store
 
