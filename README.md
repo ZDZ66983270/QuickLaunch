@@ -1,4 +1,4 @@
-# QuickLaunch
+<img width="1511" height="886" alt="image" src="https://github.com/user-attachments/assets/828991e3-b1b2-4feb-89c5-039883cbf18f" /># QuickLaunch
 
 Miss the classic Launchpad on newer Macs? QuickLaunch brings that familiar fullscreen app launcher back, with drag-and-drop folders, fast search, and a desktop-native feel.  
 如果你在新版 Mac 上怀念以前那个一键铺满全屏的启动台，QuickLaunch 就是把这种熟悉体验带回来的替代方案，还补上了拖拽分组、快速搜索和更贴近桌面的使用感。
@@ -34,6 +34,7 @@ It supports app search, paging, drag-and-drop sorting, and folder creation.
   背景支持与系统壁纸同步
 
 ## Project Contents | 仓库内容
+<img width="1511" height="886" alt="image" src="https://github.com/user-attachments/assets/f64f97b9-f41f-4643-80a0-4e74827256df" />
 
 This repository is prepared for source-code sharing and DMG distribution.  
 这个仓库已经整理为“源码 + DMG 安装包”同时可上传的形式。
