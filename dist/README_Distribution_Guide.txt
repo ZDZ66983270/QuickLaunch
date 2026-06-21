@@ -12,6 +12,8 @@ Recommended usage | 适用场景
 - 直接拷贝到另一台 Mac 后运行
 - No Xcode or Swift installation required on the target Mac
 - 目标机无需安装 Xcode 或 Swift
+- Especially useful for users on newer Macs who miss the old Launchpad workflow
+- 特别适合在新版 Mac 上想找回旧版启动台使用方式的用户
 
 First launch tips | 首次打开建议
 1. Copy QuickLaunch.app to Desktop or /Applications

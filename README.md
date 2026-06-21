@@ -1,10 +1,24 @@
 # QuickLaunch
 
-QuickLaunch is a macOS app launcher inspired by the native Launchpad experience.  
-QuickLaunch 是一个参考 macOS 原生启动台体验的应用启动器。
+Miss the classic Launchpad on newer Macs? QuickLaunch brings that familiar fullscreen app launcher back, with drag-and-drop folders, fast search, and a desktop-native feel.  
+如果你在新版 Mac 上怀念以前那个一键铺满全屏的启动台，QuickLaunch 就是把这种熟悉体验带回来的替代方案，还补上了拖拽分组、快速搜索和更贴近桌面的使用感。
+
+Built for users who want the old Launchpad workflow instead of hunting apps through Finder, Spotlight, or the Dock.  
+它特别适合那些不想只靠 Finder、Spotlight 或 Dock 找应用，而是更习惯旧版启动台工作流的用户。
 
 It supports app search, paging, drag-and-drop sorting, and folder creation.  
 它支持应用搜索、分页浏览、拖拽排序，以及文件夹创建与整理。
+
+## Why QuickLaunch | 为什么是 QuickLaunch
+
+- Bring back the old-school Launchpad feeling on modern macOS  
+  在现代 macOS 上找回旧版启动台的感觉
+- Open all your apps in one clean fullscreen-style launcher  
+  用一个整洁的大屏启动器查看和打开所有应用
+- Organize icons the way long-time Mac users expect  
+  按老 Mac 用户熟悉的方式整理图标与文件夹
+- Great for users migrating to newer Macs and missing the old workflow  
+  很适合升级到新版 Mac 后，仍怀念旧工作流的用户
 
 ## Highlights | 功能特点
 
@@ -88,6 +102,9 @@ Free for personal use only. Commercial use is not allowed.
 仅限个人免费使用，不可用于商业用途。
 
 ## Distribution Notes | 分发说明
+
+Download the latest DMG from the Releases page when available.  
+如果已发布 Release，建议优先从 Releases 页面下载最新 DMG。
 
 If macOS blocks the app on first launch:
 
